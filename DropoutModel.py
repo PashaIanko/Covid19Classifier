@@ -8,7 +8,7 @@ from DataProperties import DataProperties
 # layers
 from tensorflow.keras.layers import Input as Input
 from tensorflow.keras.layers import Conv2D as Conv2D
-from tensorflow.keras.layers import BatchNormalization as BatchNormalization
+from tensorflow.keras.layers import Dropout as Dropout
 from tensorflow.keras.layers import Activation
 from tensorflow.keras.layers import MaxPool2D as MaxPool2D
 from tensorflow.keras.layers import Flatten as Flatten
@@ -17,15 +17,16 @@ from tensorflow.keras.layers import Dense as Dense
 import tensorflow as tf
 
 
-class BNModel(Model):
+class DropoutModel(Model):
 
     def __init__(self):
         super().__init__()
+        self.drop_rate = 0.1
 
     def init_name(self):
-        self.name = 'BN CNN'
+        self.name = 'Dropout CNN'
 
-    def bn_conv_pool_layer(self, filters, kernel_size, strides):
+    def dropout_conv_pool_layer(self, filters, kernel_size, strides):
         return [
             Conv2D(
                 filters, 
@@ -35,17 +36,19 @@ class BNModel(Model):
                 activation = None
             ),
             
-            BatchNormalization(axis = -1),
-            
             Activation('relu'),
             
             MaxPool2D(
                 pool_size = (2, 2),
                 strides = (2, 2),
                 padding = 'same'
-            )
-        ]
+            ),
 
+            Dropout(
+                rate = self.drop_rate
+            )
+
+        ]
 
     def construct_model(self):
         input_layer = [
@@ -56,24 +59,25 @@ class BNModel(Model):
         ]
 
         core_layers = \
-            self.bn_conv_pool_layer(16, (3, 3), (1, 1)) + \
-            self.bn_conv_pool_layer(32, (3, 3), (1, 1)) + \
-            self.bn_conv_pool_layer(64, (3, 3), (1, 1)) + \
-            self.bn_conv_pool_layer(256, (3, 3), (1, 1))
+            self.dropout_conv_pool_layer(16, (3, 3), (1, 1)) + \
+            self.dropout_conv_pool_layer(32, (3, 3), (1, 1)) + \
+            self.dropout_conv_pool_layer(64, (3, 3), (1, 1)) + \
+            self.dropout_conv_pool_layer(256, (3, 3), (1, 1))
 
         dense_layers = [
                 Flatten(),
-                Dense(128, activation = 'elu'),
+                Dense(128, activation = 'relu'),
+                Dropout(0.4),
                 Dense(DataProperties.n_classes, activation = 'softmax')
         ]
 
-        bn_model = tf.keras.Sequential(
+        dropout_model = tf.keras.Sequential(
             input_layer + \
             core_layers + \
             dense_layers
         )
         
-        self.model = bn_model
+        self.model = dropout_model
 
     def compile_model(self, optimizer, loss, metrics):
         self.model.compile(
