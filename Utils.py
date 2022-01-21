@@ -48,34 +48,5 @@ def load_image(full_path):
     # print(type(img))
     return img
 
-def get_dataset(
-    path,
-    batch_size,
-    image_size,
-    shuffle,
-    seed,
-    subset,
-    validation_split = None
-):  
 
-    ds = tf.keras.preprocessing.image_dataset_from_directory(
-        path,
-        labels = 'inferred',
-        label_mode = 'int',
-        color_mode = 'rgb',
-        batch_size = batch_size,
-        image_size = image_size,
-        shuffle = shuffle,
-        seed = seed,
-        validation_split = validation_split,
-        subset = subset
-    )
-
-    #ds = ds.repeat()
-    return {
-        'class names': ds.class_names,
-        'data': ds.cache().prefetch(
-            buffer_size = tf.data.experimental.AUTOTUNE
-        )
-    }
     
