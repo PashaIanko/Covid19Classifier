@@ -74,5 +74,15 @@ def plot_history(history, metrics_name, plot_validation, figsize = (12, 8)):
     plt.legend(loc = 'lower right')
     plt.grid()
 
+def visualize(batch, labels, n_subplots):
+    for i in range(n_subplots): #(batch_size):
+        ax = plt.subplot(
+            int(np.sqrt(n_subplots)), 
+            int(np.sqrt(n_subplots)), 
+            i + 1
+        )
+        plt.imshow(batch[i])
+        plt.title(str(labels[i]))
+        plt.axis("off")
 
     
