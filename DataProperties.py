@@ -29,8 +29,10 @@ class DataProperties:
     
     def assign_data_paths(self):
         if self.envorinment == 'pc':
+            self.checkpoint_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Checkpoints/'
             self.train_data_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Data/TrainData/'
             self.test_data_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Data/TestData/'
         elif self.envorinment == 'colab':
+            self.checkpoint_path = '/content/drive/MyDrive/UNIPD/HDA/Project/Checkpoints/'
             self.train_data_path = '/content/drive/MyDrive/UNIPD/HDA/Project/TrainData/'
             self.test_data_path = '/content/drive/MyDrive/UNIPD/HDA/Project/TestData/'

@@ -55,11 +55,7 @@ class CNNModel(Model):
         self.model = cnn_model
 
     def compile_model(self, optimizer, loss, metrics):
-        self.model.compile(
-            optimizer = optimizer,
-            loss = loss,
-            metrics = metrics
-        )
+        super().compile_model(optimizer, loss, metrics)
 
 
         
