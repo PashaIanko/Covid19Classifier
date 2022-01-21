@@ -4,6 +4,7 @@ import numpy as np
 from DataProperties import DataProperties
 import cv2
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 def load_filenames(data_path, max_files = None):
     p = os.listdir(data_path)
@@ -47,6 +48,31 @@ def load_image(full_path):
     img = cv2.imread(full_path, cv2.IMREAD_COLOR)
     # print(type(img))
     return img
+
+def plot_history(history, metrics_name, plot_validation, figsize = (12, 8)):
+    fig, ax = plt.subplots(figsize = figsize)
+    ax.plot(
+        history[metrics_name], 
+        label = metrics_name,
+        marker = 'o',
+        markersize = 11,
+        markerfacecolor = 'white'
+    )
+    
+    if plot_validation:
+        plt.plot(
+            history['val_' + metrics_name], 
+            label = metrics_name + ' (validation)',
+            marker = 'o',
+            markersize = 11,
+            markerfacecolor = 'white'
+        )
+    
+    plt.xlabel('Epoch')
+    plt.ylabel(metrics_name)
+    plt.ylim([0.01, 1])
+    plt.legend(loc = 'lower right')
+    plt.grid()
 
 
     

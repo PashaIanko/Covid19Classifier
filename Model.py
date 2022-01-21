@@ -17,7 +17,11 @@ class Model:
 
     @abstractclassmethod
     def compile_model(self, optimizer, loss, metrics):
-        pass
+        self.model.compile(
+            optimizer = optimizer,
+            loss = loss,
+            metrics = metrics
+        )
 
 
 
