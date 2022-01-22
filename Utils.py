@@ -155,4 +155,32 @@ def visualize_kernels(kernels):
         ax.imshow(kernel)
         ax.set_title(f'Color channel {i + 1}')
 
+def visualize_kernel_work(model, n_layer, n_kernel, image, label, n_color_channels):
+    
+    conv_layer = model.layers[n_layer]
+    kernels = conv_layer.get_weights()[0]
+
+    color_kernels = [
+        kernels[:, :, color_ch, n_kernel]
+        for color_ch in range(n_color_channels)
+    ]
+
+    kern_shape = kernels.shape
+
+    print(
+        f'''We have:
+        {kern_shape[0]} by {kern_shape[1]} kernel, 
+        of {kern_shape[2]} color channels,
+        total: {kern_shape[3]} kernels'''
+    )
+
+    visualize_kernels(color_kernels)
+
+    _ = visualize_convolutions(
+        image,
+        color_kernels,
+        label = label,
+        n_color_channels = n_color_channels
+    )
+
     
