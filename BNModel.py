@@ -19,8 +19,8 @@ import tensorflow as tf
 
 class BNModel(Model):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def init_name(self):
         self.name = 'BN CNN'
@@ -75,11 +75,11 @@ class BNModel(Model):
         
         self.model = bn_model
 
-    def compile_model(self, optimizer, loss, metrics):
+    def compile_model(self):
         self.model.compile(
-            optimizer = optimizer,
-            loss = loss,
-            metrics = metrics
+            optimizer = self.optimizer,
+            loss = self.loss,
+            metrics = self.metrics
         )
 
 

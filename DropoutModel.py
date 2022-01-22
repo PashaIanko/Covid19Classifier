@@ -19,8 +19,8 @@ import tensorflow as tf
 
 class DropoutModel(Model):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.drop_rate = 0.1
 
     def init_name(self):
@@ -79,11 +79,11 @@ class DropoutModel(Model):
         
         self.model = dropout_model
 
-    def compile_model(self, optimizer, loss, metrics):
+    def compile_model(self):
         self.model.compile(
-            optimizer = optimizer,
-            loss = loss,
-            metrics = metrics
+            optimizer = self.optimizer,
+            loss = self.loss,
+            metrics = self.metrics
         )
 
 
