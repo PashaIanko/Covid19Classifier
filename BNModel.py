@@ -75,12 +75,4 @@ class BNModel(Model):
         
         self.model = bn_model
 
-    def compile_model(self):
-        self.model.compile(
-            optimizer = self.optimizer,
-            loss = self.loss,
-            metrics = self.metrics
-        )
-
-
         
