@@ -6,6 +6,7 @@ import cv2
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from scipy.signal import convolve2d
 
 
 def load_filenames(data_path, max_files = None):
@@ -113,5 +114,45 @@ def plot_confusion_matrix(Y_true, Y_pred, class_indices):
 
     #plt.title(f'Confusion matrix for {model_name}', fontsize = 18)
     plt.show()
+
+
+def visualize_convolutions(
+    image, 
+    kernels, 
+    label,
+    n_color_channels
+):
+    rgb_components = [
+        image[:, :, channel] for channel in range(n_color_channels)
+    ]
+    
+    assert len(rgb_components) == len(kernels)
+
+    convolved = [
+        convolve2d(
+            rgb_components[i], 
+            kernels[i],
+            mode = 'same'
+        ) 
+        for i in range(n_color_channels)
+    ]
+
+    _, axes = plt.subplots(1, 4, figsize = (15, 15))
+
+    axes[0].imshow(image)
+    axes[0].set_title('Source image')
+    
+    for i in range(len(convolved)):
+        axes[i + 1].imshow(convolved[i])
+        axes[i + 1].set_title(f'Color channel {i + 1}')
+    return convolved
+
+def visualize_kernels(kernels):
+    n_subplots = len(kernels)
+    _, axes = plt.subplots(1, n_subplots)
+    for i, kernel in enumerate(kernels):
+        ax = axes[i]
+        ax.imshow(kernel)
+        ax.set_title(f'Color channel {i + 1}')
 
     
