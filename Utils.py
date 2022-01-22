@@ -5,6 +5,8 @@ from DataProperties import DataProperties
 import cv2
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
 
 def load_filenames(data_path, max_files = None):
     p = os.listdir(data_path)
@@ -84,5 +86,32 @@ def visualize(batch, labels, n_subplots):
         plt.imshow(batch[i])
         plt.title(str(labels[i]))
         plt.axis("off")
+
+
+
+def plot_confusion_matrix(Y_true, Y_pred, class_indices):
+
+    #fig, axes = plt.subplots(1, 1, figsize = (5, 5))
+    
+    #axes.set_ylabel('True', fontdict={'size': '16'})
+    #axes.set_xlabel('Predicted', fontdict={'size': '16'})
+    #axes.tick_params(axis='both', labelsize=17)
+
+    cm = confusion_matrix(
+        Y_true, 
+        Y_pred, 
+        normalize = 'true'
+    )
+    disp = ConfusionMatrixDisplay(
+        confusion_matrix = cm,
+        display_labels = [k for k in class_indices.keys()] #translate_labels(class_indices),
+    )
+    disp.plot(
+        cmap = 'Oranges',
+        xticks_rotation = 'vertical',
+    )
+
+    #plt.title(f'Confusion matrix for {model_name}', fontsize = 18)
+    plt.show()
 
     
