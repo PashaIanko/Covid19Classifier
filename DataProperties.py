@@ -5,7 +5,6 @@ class DataProperties:
     healthy_class = 2
     n_classes = 3
     classes = ['covid', 'pneumonia', 'normal']
-    strategy = 'check'  # 'normal'
 
     def __init__(self, environment):
 
@@ -23,9 +22,6 @@ class DataProperties:
         self.test_covid_path = self.test_data_path + 'covid/'
         self.test_pneumonia_path = self.test_data_path + 'pneumonia/'
         self.test_healthy_path = self.test_data_path + 'normal/'
-
-
-        
     
     def assign_data_paths(self):
         if self.envorinment == 'pc':
