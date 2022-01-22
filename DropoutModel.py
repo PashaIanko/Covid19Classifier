@@ -79,12 +79,5 @@ class DropoutModel(Model):
         
         self.model = dropout_model
 
-    def compile_model(self):
-        self.model.compile(
-            optimizer = self.optimizer,
-            loss = self.loss,
-            metrics = self.metrics
-        )
-
 
         

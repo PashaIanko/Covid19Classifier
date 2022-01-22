@@ -146,12 +146,5 @@ class ResNetModel(Model):
 
         # Create model
         self.model = tf_Model(inputs = X_input, outputs = X, name='ResNet50')
-    
-    def compile_model(self):
-        self.model.compile(
-            optimizer = self.optimizer,
-            loss = self.loss,
-            metrics = self.metrics
-        )
 
 
