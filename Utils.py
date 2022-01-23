@@ -183,4 +183,23 @@ def visualize_kernel_work(model, n_layer, n_kernel, image, label, n_color_channe
         n_color_channels = n_color_channels
     )
 
+def _fit(
+    model, 
+    train_flow, train_steps,
+    val_flow, val_steps,
+    epochs,
+    callbacks
+):
+    history = model.fit(
+        train_flow,
+        steps_per_epoch = train_steps,
+        
+        validation_data = val_flow,
+        validation_steps = val_steps,
+
+        epochs = epochs,
+        callbacks = callbacks
+    )
+    return history
+
     
