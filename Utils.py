@@ -221,6 +221,14 @@ def collect_metrics(models_dict, data_flow, data_steps):
         res_dict[name]['precision'] = metrics['Precision']
         res_dict[name]['recall'] = metrics['Recall']
 
+        # number of trainable parameters
+        trainable_params = np.sum(
+            [np.prod(v.get_shape()) for v in model.model.trainable_weights]
+        )
+        res_dict[name]['tr_params'] = trainable_params
+        # nonTrainableParams = np.sum([np.prod(v.get_shape()) for v in model.non_trainable_weights])
+        # totalParams = trainableParams + nonTrainableParams
+        
     return res_dict
 
 
