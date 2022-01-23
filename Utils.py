@@ -207,8 +207,8 @@ def collect_metrics(models_dict, data_flow, data_steps):
            steps = data_steps
         )
 
-        res_dict[name]['loss'] = eval_res[0]  # loss
-        res_dict[name]['accuracy'] = eval_res[1]  # accuracy
+        res_dict[name]['test_loss^(-1)'] = eval_res[0]  # loss
+        res_dict[name]['test_accuracy'] = eval_res[1]  # accuracy
 
 
         data_flow.reset()
