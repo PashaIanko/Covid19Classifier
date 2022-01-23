@@ -4,6 +4,8 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import accuracy_score
 import numpy as np
+from os import mkdir
+from os.path import isdir
 
 class Model:
     def __init__(
@@ -68,9 +70,7 @@ class Model:
 
         return res_dict
 
-
-
-
-
-
-
+    def save_model(self, dir):
+        if not isdir(dir):
+            mkdir(dir)
+        self.model.save(dir + self.name + '.h5')
