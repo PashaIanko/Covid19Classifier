@@ -197,5 +197,31 @@ def visualize_kernel_work(model, n_layer, n_kernel, image, label, n_color_channe
     )
 
 
+def collect_metrics(models_dict, data_flow, data_steps):
+    res_dict = {k: {} for k in models_dict.keys()}
+
+    for name, model in models_dict.items():
+        data_flow.reset()
+        eval_res = model.model.evaluate(
+           data_flow,
+           steps = data_steps
+        )
+
+        res_dict[name]['loss'] = eval_res[0]  # loss
+        res_dict[name]['accuracy'] = eval_res[1]  # accuracy
+
+
+        data_flow.reset()
+        metrics = model.evaluate_metrics(
+            data_flow,
+            data_steps
+        )
+
+        res_dict[name]['F1'] = metrics['F1']
+        res_dict[name]['precision'] = metrics['Precision']
+        res_dict[name]['recall'] = metrics['Recall']
+
+    return res_dict
+
 
     
