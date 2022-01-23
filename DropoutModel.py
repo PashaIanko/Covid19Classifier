@@ -24,7 +24,7 @@ class DropoutModel(Model):
         self.drop_rate = 0.1
 
     def init_name(self):
-        self.name = 'Dropout CNN'
+        self.name = 'Dropout_CNN'
 
     def dropout_conv_pool_layer(self, filters, kernel_size, strides):
         return [
