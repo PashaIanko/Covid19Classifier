@@ -1,3 +1,7 @@
+from datetime import date
+from os.path import isdir
+from os import mkdir
+
 class DataProperties:
 
     covid_class = 0
@@ -6,14 +10,16 @@ class DataProperties:
     n_classes = 3
     classes = ['covid', 'pneumonia', 'normal']
 
-    def __init__(self, environment):
+    def __init__(self, environment, n_trial):
 
         self.envorinment = environment #'pc'  # 'colab'
+        self.n_trial = n_trial
         
         self.train_data_path = None
         self.test_data_path = None
 
         self.assign_data_paths()
+        self.update_save_path()
 
         self.train_covid_path = self.train_data_path + 'covid/'
         self.train_pneumonia_path = self.train_data_path + 'pneumonia/'
@@ -29,14 +35,31 @@ class DataProperties:
     
     def assign_data_paths(self):
         if self.envorinment == 'pc':
-            self.models_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/SavedModels/'
-            self.checkpoint_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Checkpoints/'
+            #self.models_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/SavedModels/'
+            self.checkpoint_path = f'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Checkpoints/{str(date.today())}/'
             self.train_data_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Data/TrainData/'
             self.test_data_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Data/TestData/'
             self.val_data_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/Data/ValidationData/'
         elif self.envorinment == 'colab':
-            self.models_path = '/content/drive/MyDrive/UNIPD/HDA/Project/SavedModels/'
+            #self.models_path = '/content/drive/MyDrive/UNIPD/HDA/Project/SavedModels/'
             self.checkpoint_path = '/content/drive/MyDrive/UNIPD/HDA/Project/Checkpoints/'
             self.train_data_path = '/content/drive/MyDrive/UNIPD/HDA/Project/TrainData/'
             self.test_data_path = '/content/drive/MyDrive/UNIPD/HDA/Project/TestData/'
             self.val_data_path =  '/content/drive/MyDrive/UNIPD/HDA/Project/ValidationData/'
+    
+    def update_save_path(self):
+        today_date = str(date.today())
+        if self.envorinment == 'pc':
+            core_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/SavedModels/'
+        elif self.envorinment == 'colab':
+            core_path = '/content/drive/MyDrive/UNIPD/HDA/Project/SavedModels/'
+
+        today_path = f'{core_path}/{today_date}/'
+        models_path = f'{core_path}/{today_date}/trial-{str(self.n_trial)}/'
+
+        paths = [core_path, today_path, models_path]
+        for p in paths:
+            if not (isdir(p)):
+                mkdir(p)
+
+        self.models_path = models_path
