@@ -231,5 +231,14 @@ def collect_metrics(models_dict, data_flow, data_steps):
         
     return res_dict
 
+def calc_files(directory):
+    total_files = 0
+
+    for base, _, files in os.walk(directory):
+        # print('Searching in : ',base)
+        for _ in files:
+            total_files += 1
+    return total_files
+
 
     
