@@ -23,7 +23,7 @@ class BNModel(Model):
         super().__init__(**kwargs)
 
     def init_name(self):
-        self.name = 'BN CNN'
+        self.name = 'BN_CNN'
 
     def bn_conv_pool_layer(self, filters, kernel_size, strides):
         return [
