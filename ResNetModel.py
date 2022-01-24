@@ -96,7 +96,7 @@ class ResNetModel(Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def init__name(self):
+    def init_name(self):
         self.name = 'ResNet'
 
     def construct_model(self):
