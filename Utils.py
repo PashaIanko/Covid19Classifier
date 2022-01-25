@@ -7,6 +7,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from scipy.signal import convolve2d
+import time
 
 
 def load_filenames(data_path, max_files = None):
@@ -202,10 +203,16 @@ def collect_metrics(models_dict, data_flow, data_steps):
 
     for name, model in models_dict.items():
         data_flow.reset()
+
+        t_start = time.time()
         eval_res = model.model.evaluate(
            data_flow,
            steps = data_steps
         )
+        t_end = time.time()
+
+        res_dict[name]['data_eval_time_sec'] = t_end - t_start
+        res_dict[name]['data_size'] = data_flow.n
 
         res_dict[name]['test_loss^(-1)'] = eval_res[0]  # loss
         res_dict[name]['test_accuracy'] = eval_res[1]  # accuracy
