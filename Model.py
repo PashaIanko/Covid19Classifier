@@ -8,22 +8,13 @@ from os import mkdir
 from os.path import isdir
 
 class Model:
-    def __init__(
-        self, 
-        **kwargs
-    ):
-        self.name = None
+    def __init__(self, name):
+        self.name = name
         self.model = None
-        self.optimizer = kwargs['optimizer']
-        self.loss = kwargs['loss']
-        self.metrics = kwargs['metrics']
-        self.checkpoint_callback = kwargs['checkpoint']
-
-        self.init_name()
-
-    @abstractclassmethod
-    def init_name(self):
-        pass
+        # self.optimizer = kwargs['optimizer']
+        # self.loss = kwargs['loss']
+        # self.metrics = kwargs['metrics']
+        # self.checkpoint_callback = kwargs['checkpoint']
 
     @abstractclassmethod
     def construct_model(self):
@@ -34,11 +25,12 @@ class Model:
         y_pred = self.model.predict(flow, steps)
         return np.argmax(y_pred, axis = 1)
 
-    def compile_model(self):
+    def compile_model(self, **compile_params):
         self.model.compile(
-            optimizer = self.optimizer,
-            loss = self.loss,
-            metrics = self.metrics
+            **compile_params
+            # optimizer = self.optimizer,
+            # loss = self.loss,
+            # metrics = self.metrics
         )
 
     def evaluate_metrics(self, flow, steps):

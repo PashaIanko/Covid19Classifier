@@ -23,8 +23,8 @@ def conv_2d_pooling_layers(n_filters):
 
 class CNNModel(Model):
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, name):
+        super().__init__(name)
 
     def init_name(self):
         self.name = 'CNN'
