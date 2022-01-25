@@ -241,4 +241,26 @@ def calc_files(directory):
     return total_files
 
 
+def visualize_full_train_time(models_dict):
+    if not(models_dict is None) and len(models_dict):
+        legends = []
+        for model_name, model in models_dict.items():
+            model = model['model']
+            fit_times = model.epoch_time_callback.times
+
+            plt.xlabel('Epoch')
+            plt.ylabel('Total time taken until an epoch in seconds')
+            plt.plot(
+                *zip(*fit_times),
+                marker = 'o',
+                linestyle = '--',
+                markerfacecolor = 'white',
+                markersize = 12
+            )
+            legends.append(model_name)
+        
+        plt.legend(legends)
+        plt.show()
+
+
     
