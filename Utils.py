@@ -263,4 +263,39 @@ def visualize_full_train_time(models_dict):
         plt.show()
 
 
+def extract_dt(epochs_times):
+    epochs_dts = []
+    for i in range(len(epochs_times)):
+        epoch = epochs_times[i][0]
+        time = epochs_times[i][1]
+
+        if i == 0:
+            epochs_dts.append((epoch, time))
+        else:
+            time_prev = epochs_times[i - 1][1]
+            epochs_dts.append((epoch, time - time_prev))
+    return epochs_dts
+
+
+def visualize_epoch_time(models_dict):
+    legends = []
+    for model_name, model in models_dict.items():
+        model = model['model']
+        fit_times = model.epoch_time_callback.times
+        epochs_delta_ts = extract_dt(fit_times)
+
+        plt.xlabel('Epoch')
+        plt.ylabel('Total time taken until an epoch in seconds')
+        plt.plot(
+            *zip(*epochs_delta_ts),
+            marker = 'o',
+            linestyle = '--',
+            markerfacecolor = 'white',
+            markersize = 12
+        )
+        legends.append(model_name)
+    
+    plt.legend(legends)
+    plt.show()
+
     
