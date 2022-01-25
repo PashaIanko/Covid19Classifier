@@ -6,11 +6,14 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 from os import mkdir
 from os.path import isdir
+from TimeCallBack import TimeCallBack
 
 class Model:
     def __init__(self, name):
         self.name = name
         self.model = None
+        self.epoch_time_callback = TimeCallBack()
+        
         # self.optimizer = kwargs['optimizer']
         # self.loss = kwargs['loss']
         # self.metrics = kwargs['metrics']
