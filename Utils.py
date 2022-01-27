@@ -78,7 +78,12 @@ def plot_history(history, metrics_name, plot_validation, figsize = (12, 8)):
     plt.legend(loc = 'lower right')
     plt.grid()
 
-def visualize(batch, labels, n_subplots, figsize = (15, 15)):
+def get_class_name(class_indices, label):
+    for class_name, val in class_indices.items():
+        if val == label:
+            return class_name
+
+def visualize(batch, labels, n_subplots, class_indices, figsize = (15, 15)):
     plt.figure(figsize = figsize)
     for i in range(n_subplots): #(batch_size):
         ax = plt.subplot(
@@ -87,10 +92,8 @@ def visualize(batch, labels, n_subplots, figsize = (15, 15)):
             i + 1
         )
         plt.imshow(batch[i])
-        plt.title(str(labels[i]))
+        plt.title(get_class_name(class_indices, labels[i]))
         plt.axis("off")
-
-
 
 def plot_confusion_matrix(Y_true, Y_pred, class_indices):
 
