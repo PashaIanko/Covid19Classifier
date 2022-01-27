@@ -7,6 +7,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from scipy.signal import convolve2d
+import time
 
 
 def load_filenames(data_path, max_files = None):
@@ -202,10 +203,16 @@ def collect_metrics(models_dict, data_flow, data_steps):
 
     for name, model in models_dict.items():
         data_flow.reset()
+
+        t_start = time.time()
         eval_res = model.model.evaluate(
            data_flow,
            steps = data_steps
         )
+        t_end = time.time()
+
+        res_dict[name]['data_eval_time_sec'] = t_end - t_start
+        res_dict[name]['data_size'] = data_flow.n
 
         res_dict[name]['test_loss^(-1)'] = eval_res[0]  # loss
         res_dict[name]['test_accuracy'] = eval_res[1]  # accuracy
@@ -240,5 +247,62 @@ def calc_files(directory):
             total_files += 1
     return total_files
 
+
+def visualize_full_train_time(models_dict):
+    if not(models_dict is None) and len(models_dict):
+        legends = []
+        for model_name, model in models_dict.items():
+            model = model['model']
+            fit_times = model.epoch_time_callback.times
+
+            plt.xlabel('Epoch')
+            plt.ylabel('Total time taken until an epoch in seconds')
+            plt.plot(
+                *zip(*fit_times),
+                marker = 'o',
+                linestyle = '--',
+                markerfacecolor = 'white',
+                markersize = 12
+            )
+            legends.append(model_name)
+        
+        plt.legend(legends)
+        plt.show()
+
+
+def extract_dt(epochs_times):
+    epochs_dts = []
+    for i in range(len(epochs_times)):
+        epoch = epochs_times[i][0]
+        time = epochs_times[i][1]
+
+        if i == 0:
+            epochs_dts.append((epoch, time))
+        else:
+            time_prev = epochs_times[i - 1][1]
+            epochs_dts.append((epoch, time - time_prev))
+    return epochs_dts
+
+
+def visualize_epoch_time(models_dict):
+    legends = []
+    for model_name, model in models_dict.items():
+        model = model['model']
+        fit_times = model.epoch_time_callback.times
+        epochs_delta_ts = extract_dt(fit_times)
+
+        plt.xlabel('Epoch')
+        plt.ylabel('Total time taken until an epoch in seconds')
+        plt.plot(
+            *zip(*epochs_delta_ts),
+            marker = 'o',
+            linestyle = '--',
+            markerfacecolor = 'white',
+            markersize = 12
+        )
+        legends.append(model_name)
+    
+    plt.legend(legends)
+    plt.show()
 
     
