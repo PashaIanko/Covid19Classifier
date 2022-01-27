@@ -10,11 +10,11 @@ class DatasetParameters:
 
     epochs = 500
 
-    width_shift_range = 0.07
-    height_shift_range = 0.07
+    width_shift_range = 0.09
+    height_shift_range = 0.09
     
     horizontal_flip = True
-    vertical_flip = False
+    vertical_flip = True
     
     rotation_range = 0.2  # 0.1
     zoom_range = [0.9, 1.1]

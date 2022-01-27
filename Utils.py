@@ -7,6 +7,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from scipy.signal import convolve2d
+import pandas as pd
 import time
 
 
@@ -308,5 +309,21 @@ def visualize_epoch_time(models_dict):
     
     plt.legend(legends)
     plt.show()
+
+def save_train_times(models_dict, save_dir):
+    res_df = pd.DataFrame()
+
+    for name, model in models_dict.items():
+
+        # epochs = [pair[0] for pair in model['model'].epoch_time_callback.times]
+        times = [pair[1] for pair in model['model'].epoch_time_callback.times]
+
+        df_new = pd.DataFrame({name: times})
+        res_df = pd.concat([res_df, df_new], ignore_index = True)
+    
+    res_df.to_csv(save_dir)
+
+    
+
 
     
