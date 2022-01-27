@@ -2,6 +2,7 @@ from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.models import Model as tf_Model
 
@@ -88,7 +89,9 @@ class VGG19Model(Model):
 
         X = Flatten()(X)
         X = Dense(units = 4096, activation = 'relu')(X)
+        X = Dropout(0.3)(X)
         X = Dense(units = 4096, activation = 'relu')(X)
+        X = Dropout(0.3)(X)
         X = Dense(DataProperties.n_classes, activation='sigmoid')(X)
         
         self.model = tf_Model(inputs = X_input, outputs = X, name = self.name)
