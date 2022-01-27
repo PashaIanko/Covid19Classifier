@@ -89,7 +89,7 @@ class VGG19Model(Model):
 
         X = Flatten()(X)
         X = Dense(units = 4096, activation = 'relu')(X)
-        X = Dropout(0.3)(X)
+        # X = Dropout(0.3)(X)
         X = Dense(units = 4096, activation = 'relu')(X)
         X = Dropout(0.3)(X)
         X = Dense(DataProperties.n_classes, activation='sigmoid')(X)
