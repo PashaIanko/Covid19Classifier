@@ -323,6 +323,11 @@ def save_train_times(models_dict, save_dir):
     
     res_df.to_csv(save_dir)
 
+def save_histories(hist_dict, save_dir):
+    for model_name, hist in hist_dict.items():
+        df = pd.DataFrame(hist.history)
+        df.to_csv(f'{save_dir}{model_name}_history.csv')
+
     
 
 
