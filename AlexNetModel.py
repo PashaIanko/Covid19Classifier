@@ -4,7 +4,7 @@ from DataProperties import DataProperties
 
 import tensorflow as tf
 from tensorflow.keras import layers, models
-from tensorflow.keras import Sequential
+# from tensorflow.keras import Sequential
 
 
 class AlexNetModel(Model):
@@ -18,15 +18,22 @@ class AlexNetModel(Model):
     def construct_model(self):
 
         model = models.Sequential()
+        
         model.add(tf.keras.layers.Lambda( 
-            lambda image: tf.image.resize( 
+            lambda image: tf.image.resize(
                 image, 
-                (224, 224), 
+                (256, 256),
                 method = tf.image.ResizeMethod.BICUBIC,
                 align_corners = True, # possibly important
                 preserve_aspect_ratio = True
             )
         ))
+
+        model.add(layers.Input(
+            shape = (256, 256, 3) # PreprocessingParameters.target_shape + \
+                   # PreprocessingParameters.n_color_channels
+        ))
+        
         model.add(layers.Conv2D(96, 11, strides=4, padding='same', input_shape = (224, 224, 3)))
         model.add(layers.Lambda(tf.nn.local_response_normalization))
         model.add(layers.Activation('relu'))
