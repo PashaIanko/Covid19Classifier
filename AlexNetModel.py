@@ -27,7 +27,7 @@ class AlexNetModel(Model):
                 preserve_aspect_ratio = True
             )
         ))
-        model.add(layers.Conv2D(96, 11, strides=4, padding='same'))
+        model.add(layers.Conv2D(96, 11, strides=4, padding='same', input_shape = (224, 224, 3)))
         model.add(layers.Lambda(tf.nn.local_response_normalization))
         model.add(layers.Activation('relu'))
         model.add(layers.MaxPooling2D(3, strides=2))
