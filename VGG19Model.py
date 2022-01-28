@@ -106,8 +106,7 @@ class VGG19Model(Model):
             lambda image: tf.image.resize(
                 image,
                 (224, 224),
-                method = tf.image.ResizeMethod.BICUBIC,
-                align_corners = True,
+                # method = tf.image.ResizeMethod.BICUBIC,
                 preserve_aspect_ratio = True
             )
         ))

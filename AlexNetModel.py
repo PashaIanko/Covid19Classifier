@@ -23,8 +23,7 @@ class AlexNetModel(Model):
             lambda image: tf.image.resize(
                 image, 
                 (256, 256),
-                method = tf.image.ResizeMethod.BICUBIC,
-                align_corners = True, # possibly important
+                # method = tf.image.ResizeMethod.BICUBIC,
                 preserve_aspect_ratio = True
             )
         ))
