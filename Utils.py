@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from scipy.signal import convolve2d
 import pandas as pd
+from ModelUtils import ModelUtils
 import time
 
 
@@ -335,6 +336,8 @@ def print_summary(models_dict, model_name):
         print(model.model.summary())
     else:
         print(f'Model {model_name} is not in the models dictionary')
+
+
 
     
 
