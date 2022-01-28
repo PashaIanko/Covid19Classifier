@@ -3,8 +3,8 @@ from PreprocessingParameters import PreprocessingParameters
 from DataProperties import DataProperties
 
 import tensorflow as tf
-from tensorflow.keras import layers, models
-# from tensorflow.keras import Sequential
+from tensorflow.keras import layers
+from tensorflow.keras.models import Model as tf_Model
 
 
 class AlexNetModel(Model):
@@ -17,49 +17,46 @@ class AlexNetModel(Model):
 
     def construct_model(self):
 
-        model = models.Sequential()
-        
-        model.add(tf.keras.layers.Lambda( 
+        inputs = layers.Input(
+            shape = PreprocessingParameters.target_shape + \
+                   PreprocessingParameters.n_color_channels
+        )
+
+        resize = tf.keras.layers.Lambda(
             lambda image: tf.image.resize(
-                image, 
+                image,
                 (256, 256),
-                # method = tf.image.ResizeMethod.BICUBIC,
                 preserve_aspect_ratio = True
             )
-        ))
+        )(inputs)
 
-        model.add(layers.Input(
-            shape = (256, 256, 3) # PreprocessingParameters.target_shape + \
-                   # PreprocessingParameters.n_color_channels
-        ))
+        x = layers.Conv2D(96, 11, strides=4, padding='same', input_shape = (256, 256, 3))(resize)
+        x = layers.Lambda(tf.nn.local_response_normalization)(x)
+        x = layers.Activation('relu')(x)
+        x = layers.MaxPooling2D(3, strides=2)(x)
+
+        x = layers.Conv2D(256, 5, strides=4, padding='same')(x)
+        x = layers.Lambda(tf.nn.local_response_normalization)(x)
+        x = layers.Activation('relu')(x)
+        x = layers.MaxPooling2D(3, strides=2)(x)
+
+        x = layers.Conv2D(384, 3, strides=4, padding='same')(x)
+        x = layers.Activation('relu')(x)
+
+        x = layers.Conv2D(384, 3, strides=4, padding='same')(x)
+        x = layers.Activation('relu')(x)
+
+        x = layers.Conv2D(256, 3, strides=4, padding='same')(x)
+        x = layers.Activation('relu')(x)
         
-        model.add(layers.Conv2D(96, 11, strides=4, padding='same', input_shape = (224, 224, 3)))
-        model.add(layers.Lambda(tf.nn.local_response_normalization))
-        model.add(layers.Activation('relu'))
-        model.add(layers.MaxPooling2D(3, strides=2))
+        x = layers.Flatten()(x)
+        x = layers.Dense(4096, activation='relu')(x)
+        x = layers.Dropout(0.5)(x)
+        x = layers.Dense(4096, activation='relu')(x)
+        x = layers.Dropout(0.5)(x)
+        predictions = layers.Dense(DataProperties.n_classes, activation='softmax')(x)
 
-        model.add(layers.Conv2D(256, 5, strides=4, padding='same'))
-        model.add(layers.Lambda(tf.nn.local_response_normalization))
-        model.add(layers.Activation('relu'))
-        model.add(layers.MaxPooling2D(3, strides=2))
-
-        model.add(layers.Conv2D(384, 3, strides=4, padding='same'))
-        model.add(layers.Activation('relu'))
-
-        model.add(layers.Conv2D(384, 3, strides=4, padding='same'))
-        model.add(layers.Activation('relu'))
-
-        model.add(layers.Conv2D(256, 3, strides=4, padding='same'))
-        model.add(layers.Activation('relu'))
-
-        model.add(layers.Flatten())
-        model.add(layers.Dense(4096, activation='relu'))
-        model.add(layers.Dropout(0.5))
-        model.add(layers.Dense(4096, activation='relu'))
-        model.add(layers.Dropout(0.5))
-        model.add(layers.Dense(DataProperties.n_classes, activation='softmax'))
-
-        self.model = model
+        self.model = tf_Model(inputs = inputs, outputs = predictions)
        
 
 

@@ -328,6 +328,11 @@ def save_histories(hist_dict, save_dir):
         df = pd.DataFrame(hist.history)
         df.to_csv(f'{save_dir}{model_name}_history.csv')
 
+def print_summary(models_dict, model_name):
+    model = models_dict[model_name]['model']
+    model.construct_model()
+    print(model.model.summary())
+
     
 
 
