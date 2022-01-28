@@ -56,10 +56,12 @@ class DataProperties:
 
         today_path = f'{core_path}/{today_date}/'
         models_path = f'{core_path}/{today_date}/trial-{str(self.n_trial)}/'
+        histories_path = f'{models_path}Histories/'
 
-        paths = [core_path, today_path, models_path]
+        paths = [core_path, today_path, models_path, histories_path]
         for p in paths:
             if not (isdir(p)):
                 mkdir(p)
 
         self.models_path = models_path
+        self.histories_path = histories_path
