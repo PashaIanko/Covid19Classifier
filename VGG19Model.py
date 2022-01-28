@@ -99,7 +99,7 @@ class VGG19Model(Model):
     #     self.model = tf_Model(inputs = X_input, outputs = X, name = self.name)
 
     def construct_model(self):
-        
+
         model = models.Sequential()        
 
         model.add(tf.keras.layers.Lambda(
@@ -112,7 +112,7 @@ class VGG19Model(Model):
             )
         ))
 
-        model.add(Conv2D(input_shape = (224, 224, 3)), filters = 64, kernel_size = (3, 3), activation = 'relu', padding = 'same')
+        model.add(Conv2D(input_shape = (224, 224, 3), filters = 64, kernel_size = (3, 3), activation = 'relu', padding = 'same'))
         model.add(Conv2D(filters = 64, kernel_size = (3, 3), activation = 'relu', padding = 'same'))
         model.add(MaxPooling2D(pool_size = (2, 2), strides = (2, 2)))
 
@@ -142,5 +142,7 @@ class VGG19Model(Model):
         model.add(Dense(units = 4096, activation = 'relu'))
         model.add(Dense(units = 4096, activation = 'relu'))
         model.add(Dense(units = DataProperties.n_classes, activation = 'softmax'))
+
+        self.model = model
 
 
