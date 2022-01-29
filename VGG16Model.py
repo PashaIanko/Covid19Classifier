@@ -28,37 +28,66 @@ class VGG16Model(Model):
                 (224, 224),
                 preserve_aspect_ratio = True
             )
-        )(inputs)
+        )
 
-        x = layers.Conv2D(input_shape = (224, 224, 3), filters = 64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(resize)
-        x = layers.Conv2D(filters = 64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(x)
-        x = layers.MaxPool2D(pool_size = (2, 2), strides = (2, 2))(x)
+        vgg = tf.keras.applications.vgg16.VGG16(
+            include_top = True,
+            weights = None,  # random initialization
+            input_shape = None,  # must be (224, 224, 3)
+            classes = DataProperties.n_classes,
+            # classifier_activation = 'softmax'
+        )
 
-        x = layers.Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+        # self.model = vgg
 
-        x = layers.Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+        self.model = tf.keras.Sequential([
+            inputs, 
+            resize,
+            vgg
+        ])
 
-        x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+        # inputs = layers.Input(
+        #     shape = PreprocessingParameters.target_shape + \
+        #         PreprocessingParameters.n_color_channels
+        # )
 
-        x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
-        x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+        # resize = tf.keras.layers.Lambda(
+        #     lambda image: tf.image.resize(
+        #         image,
+        #         (224, 224),
+        #         preserve_aspect_ratio = True
+        #     )
+        # )(inputs)
 
-        x = layers.Flatten()(x)
-        x = layers.Dense(units = 4096, activation = 'relu')(x)
-        x = layers.Dense(units = 4096, activation = 'relu')(x)
-        predictions = layers.Dense(units = DataProperties.n_classes, activation = 'softmax')(x)
+        # x = layers.Conv2D(input_shape = (224, 224, 3), filters = 64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(resize)
+        # x = layers.Conv2D(filters = 64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(x)
+        # x = layers.MaxPool2D(pool_size = (2, 2), strides = (2, 2))(x)
 
-        self.model = tf_Model(inputs = inputs, outputs = predictions)
+        # x = layers.Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+
+        # x = layers.Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+
+        # x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+
+        # x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(x)
+        # x = layers.MaxPool2D(pool_size=(2,2),strides=(2,2))(x)
+
+        # x = layers.Flatten()(x)
+        # x = layers.Dense(units = 4096, activation = 'relu')(x)
+        # x = layers.Dense(units = 4096, activation = 'relu')(x)
+        # predictions = layers.Dense(units = DataProperties.n_classes, activation = 'softmax')(x)
+
+        # self.model = tf_Model(inputs = inputs, outputs = predictions)
        
 
 
