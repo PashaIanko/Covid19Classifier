@@ -7,6 +7,9 @@ class TimeCallBack(tf.keras.callbacks.Callback):
     def __init__(self):
         self.times = []
         # use this value as reference to calculate cummulative time taken
+        # self.timetaken = time.clock()
+
+    def on_train_begin(self, logs = {}):
         self.timetaken = time.clock()
 
     def on_epoch_end(self,epoch,logs = {}):
@@ -15,5 +18,5 @@ class TimeCallBack(tf.keras.callbacks.Callback):
     def on_train_end(self,logs = {}):
         plt.xlabel('Epoch')
         plt.ylabel('Total time taken until an epoch in seconds')
-        plt.plot(*zip(*self.times))
+        plt.plot(*zip(*self.times), marker = 'o')
         plt.show()
