@@ -17,18 +17,18 @@ class VGG16Model(Model):
 
     def construct_model(self):
 
-        inputs = layers.Input(
-            shape = PreprocessingParameters.target_shape + \
-                PreprocessingParameters.n_color_channels
-        )
+        # inputs = layers.Input(
+        #     shape = PreprocessingParameters.target_shape + \
+        #         PreprocessingParameters.n_color_channels
+        # )
 
-        resize = tf.keras.layers.Lambda(
-            lambda image: tf.image.resize(
-                image,
-                (224, 224),
-                preserve_aspect_ratio = True
-            )
-        )
+        # resize = tf.keras.layers.Lambda(
+        #     lambda image: tf.image.resize(
+        #         image,
+        #         (224, 224),
+        #         preserve_aspect_ratio = True
+        #     )
+        # )
 
         vgg = tf.keras.applications.vgg16.VGG16(
             include_top = True,
@@ -38,13 +38,13 @@ class VGG16Model(Model):
             # classifier_activation = 'softmax'
         )
 
-        # self.model = vgg
+        self.model = vgg
 
-        self.model = tf.keras.Sequential([
-            inputs, 
-            resize,
-            vgg
-        ])
+        # self.model = tf.keras.Sequential([
+        #     inputs, 
+        #     resize,
+        #     vgg
+        # ])
 
         # inputs = layers.Input(
         #     shape = PreprocessingParameters.target_shape + \
