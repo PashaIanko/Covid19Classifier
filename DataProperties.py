@@ -50,15 +50,15 @@ class DataProperties:
     def update_save_path(self):
         today_date = str(date.today())
         if self.envorinment == 'pc':
-            core_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/SavedModels/'
+            self.core_path = 'C:/Users/79137/Pasha/2. UNIPD/HDA/Project/SavedModels/'
         elif self.envorinment == 'colab':
-            core_path = '/content/drive/MyDrive/UNIPD/HDA/Project/SavedModels/'
+            self.core_path = '/content/drive/MyDrive/UNIPD/HDA/Project/SavedModels/'
 
-        today_path = f'{core_path}/{today_date}/'
-        models_path = f'{core_path}/{today_date}/trial-{str(self.n_trial)}/'
+        today_path = f'{self.core_path}/{today_date}/'
+        models_path = f'{self.core_path}/{today_date}/trial-{str(self.n_trial)}/'
         histories_path = f'{models_path}Histories/'
 
-        paths = [core_path, today_path, models_path, histories_path]
+        paths = [self.core_path, today_path, models_path, histories_path]
         for p in paths:
             if not (isdir(p)):
                 mkdir(p)
