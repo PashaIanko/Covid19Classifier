@@ -30,6 +30,18 @@ class VGG16Model(Model):
         #     )
         # )
 
+        resize = tf.keras.layers.Lambda(
+            lambda image: tf.image.resize(
+                image,
+                (224, 224),
+                preserve_aspect_ratio = True
+            )
+        )
+
+        preprocess = tf.keras.layers.Lambda(
+            lambda image: tf.keras.applications.vgg16.preprocess_input(image)
+        )
+
         vgg = tf.keras.applications.vgg16.VGG16(
             include_top = True,
             weights = None,  # random initialization
@@ -38,7 +50,13 @@ class VGG16Model(Model):
             # classifier_activation = 'softmax'
         )
 
-        self.model = vgg
+        self.model = tf.keras.Sequential([
+            resize,
+            preprocess,
+            vgg
+        ])
+
+        # self.model = vgg
 
         # self.model = tf.keras.Sequential([
         #     inputs, 
