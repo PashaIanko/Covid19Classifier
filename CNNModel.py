@@ -12,13 +12,18 @@ import tensorflow as tf
 
 
 def conv_2d_pooling_layers(n_filters):
+    # initializer = tf.keras.initializers.HeNormal(seed = 123)
     return [
             Conv2D(
                 filters = n_filters,
                 kernel_size = (3, 3),
                 padding = 'same',
-                activation = 'relu',
-                kernel_regularizer = L1L2(l1=0.01, l2=0.01)
+                
+                activation = tf.keras.layers.LeakyReLU(alpha=0.01),
+                # activation = 'relu',
+                
+                kernel_regularizer = L1L2(l1=0.01, l2=0.01),
+                kernel_initializer = tf.compat.v1.keras.initializers.he_normal(seed = 123)
             ),
             MaxPool2D()
     ]
@@ -45,8 +50,12 @@ class CNNModel(Model):
 
         dense_layers = [
                 Flatten(),
-                Dense(128, activation = 'relu', kernel_regularizer = L1L2(l1 = 0.0, l2 = 0.01)),
-                Dense(DataProperties.n_classes, activation = 'softmax')
+                Dense(128, 
+                    # activation = 'relu', 
+                    activation = tf.keras.layers.LeakyReLU(alpha=0.01),
+                    kernel_regularizer = L1L2(l1 = 0.0, l2 = 0.01), kernel_initializer = tf.compat.v1.keras.initializers.he_normal(seed = 123)),
+                Dense(
+                    DataProperties.n_classes, activation = 'softmax', kernel_initializer = tf.compat.v1.keras.initializers.he_normal(seed = 123))
         ]
 
         cnn_model = tf.keras.Sequential(
