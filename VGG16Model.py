@@ -78,8 +78,7 @@ class VGG16Model(Model):
         # )(inputs)
 
         inputs = layers.Input(
-            shape = PreprocessingParameters.target_shape + \
-                PreprocessingParameters.n_color_channels
+            shape = (224, 224, 3)
         )
 
         x = layers.Conv2D(filters = 64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(inputs)
