@@ -6,7 +6,7 @@ from PreprocessingParameters import PreprocessingParameters
 def preprocess(image):
 
     image = image / 255.
-    # image = equalize_adapthist(image, clip_limit = 0.01)
+    image = equalize_adapthist(image, clip_limit = 0.01)
     
     # image = bilateralFilter(
     #     image,
