@@ -142,7 +142,7 @@ class ResNetModel(Model):
         X = Flatten()(X)
         X = Dense(
             DataProperties.n_classes, activation='sigmoid', name='fc', kernel_initializer = glorot_uniform(seed=0)
-            )(X)
+        )(X)
 
         # Create model
         self.model = tf_Model(inputs = X_input, outputs = X, name='ResNet50')
