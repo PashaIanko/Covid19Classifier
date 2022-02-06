@@ -13,6 +13,7 @@ from tensorflow.keras.layers import ZeroPadding2D
 
 from tensorflow.keras.initializers import glorot_uniform
 from tensorflow.keras.models import Model as tf_Model
+from tensorflow.keras.regularizers import L1L2
 
 from Model import Model
 from PreprocessingParameters import PreprocessingParameters
@@ -97,12 +98,14 @@ from DataProperties import DataProperties
 def identity_block(x, filter):
     
     x_skip = x
-    x = Conv2D(filter, (3,3), padding = 'same')(x)
-    x = BatchNormalization(axis=3)(x)
+    x = Conv2D(filter, (3,3), padding = 'same',
+               kernel_regularizer = L1L2(l1 = 0.005, l2 = 0.1))(x) # 0.05
+    # x = BatchNormalization(axis=3)(x)
     x = Activation('relu')(x)
     
-    x = Conv2D(filter, (3,3), padding = 'same')(x)
-    x = BatchNormalization(axis=3)(x)
+    x = Conv2D(filter, (3,3), padding = 'same',
+               kernel_regularizer = L1L2(l1 = 0.005, l2 = 0.05))(x)
+    # x = BatchNormalization(axis=3)(x)
     
     x = Add()([x, x_skip])     
     x = Activation('relu')(x)
@@ -111,12 +114,14 @@ def identity_block(x, filter):
 def convolutional_block(x, filter):
     
     x_skip = x
-    x = Conv2D(filter, (3,3), padding = 'same', strides = (2,2))(x)
-    x = BatchNormalization(axis=3)(x)
+    x = Conv2D(filter, (3,3), padding = 'same', strides = (2,2),
+               kernel_regularizer = L1L2(l1 = 0.005, l2 = 0.05))(x)
+    # x = BatchNormalization(axis=3)(x)
     x = Activation('relu')(x)
     
-    x = Conv2D(filter, (3,3), padding = 'same')(x)
-    x = BatchNormalization(axis=3)(x)
+    x = Conv2D(filter, (3,3), padding = 'same',
+               kernel_regularizer = L1L2(l1 = 0.005, l2 = 0.05))(x)
+    # x = BatchNormalization(axis=3)(x)
     
     x_skip = Conv2D(filter, (1,1), strides = (2,2))(x_skip)
     
@@ -187,15 +192,14 @@ class ResNetModel(Model):
         
         x = ZeroPadding2D((3, 3))(x_input)
         x = Conv2D(64, kernel_size=7, strides=2, padding='same')(x)
-        x = BatchNormalization()(x)
+        # x = BatchNormalization()(x)
         x = Activation('relu')(x)
         x = MaxPool2D(pool_size=3, strides=2, padding='same')(x)
-        
-        
+
+
         block_layers = [3, 4, 6, 3]
         filter_size = 64
-
-        for i in range(4):
+        for i in range(len(block_layers)):
             if i == 0:
                 for j in range(block_layers[i]):
                     x = identity_block(x, filter_size)
@@ -204,7 +208,7 @@ class ResNetModel(Model):
                 x = convolutional_block(x, filter_size)
                 for j in range(block_layers[i] - 1):
                     x = identity_block(x, filter_size)
-        
+
         x = AveragePooling2D((2,2), padding = 'same')(x)
         x = Flatten()(x)
         x = Dense(512, activation = 'relu')(x)
