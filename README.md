@@ -1,4 +1,7 @@
 # Covid19Classifier
+Full report, data preprocessing pipeline and used algorithms are available in a **PDF file**, accessible via link:
+https://github.com/PashaIanko/Covid19Classifier/blob/main/Report%20Pavel%20Ianko.pdf
+
 The project is devoted to classification task for predicting lung diseases from X-ray images. 3-class classification task (Normal chest, pneumonia, Covid-19).
 ![Слайд1](https://user-images.githubusercontent.com/55174155/180066519-0bed45e7-301a-438c-8b0b-ab3339b33f6d.JPG)
 ![Слайд2](https://user-images.githubusercontent.com/55174155/180066524-ef080a52-42b9-4c08-9ad1-eef6d074b013.JPG)
